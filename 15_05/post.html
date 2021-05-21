@@ -1,0 +1,26 @@
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto" id="article">
+                
+            </div>
+        </div>
+    </div>
+</article>
+<hr />
+<script>
+  const id = location.pathname.split("/")[2];
+  const formData = new FormData();
+  const article = document.getElementById("article");
+  let content = "";
+  formData.append('id',id);
+  fetch('/getPostById',{
+    method: "POST",
+    body: formData
+  }).then(response=>response.json())
+    .then(result=>{
+      content += result.content;
+      content += `<p class="my-5">Автор: ${result.author} || ${result.add_date}</p>`;
+      article.innerHTML = content;
+    })
+</script>

@@ -1,0 +1,62 @@
+<div class="container my-5">
+  <h1 class="my-3 text-center">Добавить статью</h1>
+  <div class="col-md-9 mx-auto">
+    <form onsubmit="addPost(this); return false;">
+      <div class="mb-3">
+        <input name="title" type="text" class="form-control" placeholder="Заголовок">
+      </div>
+      <div class="mb-3">
+        <textarea id="sample"></textarea>
+      </div>
+      <div class="mb-3">
+        <input name="author" type="text" class="form-control" placeholder="Автор">
+      </div>
+      <div class="mb-3">
+        <input type="submit" class="form-control btn btn-primary" value="Добавить пост">
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<link href="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/css/suneditor.min.css" rel="stylesheet">
+<!-- <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/assets/css/suneditor.css" rel="stylesheet"> -->
+<!-- <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/assets/css/suneditor-contents.css" rel="stylesheet"> -->
+<script src="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/suneditor.min.js"></script>
+<!-- languages (Basic Language: English/en) -->
+<script src="https://cdn.jsdelivr.net/npm/suneditor@latest/src/lang/ru.js"></script>
+<script>
+  const editor = SUNEDITOR.create((document.getElementById('sample') || 'sample'),{
+    lang: SUNEDITOR_LANG['ru'],
+    buttonList: [
+        ['undo', 'redo',
+        'font', 'fontSize', 'formatBlock',
+        'paragraphStyle', 'blockquote',
+        'bold', 'underline', 'italic', 'strike', 'subscript', 'superscript',
+        'fontColor', 'hiliteColor', 'textStyle',
+        'removeFormat',
+        'outdent', 'indent',
+        'align', 'horizontalRule', 'list', 'lineHeight',
+        'table', 'link', 'image', 'video', 'audio', /** 'math', */ // You must add the 'katex' library at options to use the 'math' plugin.
+        /** 'imageGallery', */ // You must add the "imageGalleryUrl".
+        'fullScreen', 'showBlocks', 'codeView']
+    ],
+    height: '400px',
+    width: '100%'
+  });
+</script>
+<script>
+  function addPost(form){
+    const formData = new FormData(form);
+    formData.append('content',editor.getContents());
+    fetch("/addPost",{
+      method: "POST",
+      body: formData
+    }).then(response=>response.text())
+      .then(result=>{
+        if(result==='success'){
+          location.href='/';
+        }
+      });
+  }
+</script>

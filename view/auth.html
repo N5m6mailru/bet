@@ -1,0 +1,32 @@
+ <div class="container" py-5>
+      <h1 class="text-center my-3">Вход на сайт</h1>
+      <div class="col-md-5 mx-auto">
+        <form action="/php/handlerAuth.php"  onsubmit="sendForm(this);return false;" method="POST">
+          <div class="mb-3">
+            <input name="email" type="email" class="form-control" placeholder="Email">
+          </div>
+          <div class="mb-3">
+            <input name="password" type="passwordt" class="form-control" placeholder="Пароль">
+            <p id="info" style="color:red;"></p>
+          </div>
+          <div class="mb-3">
+            <input type="submit" class="form-control btn btn-primary" value="Войти">
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      const info = document.getElementById('info');
+      function sendForm(form){
+        info.innerText = '';
+        const formData = new FormData(form);
+        fetch("/authUser",{
+          method: "POST",
+          body: formData
+        }).then(response=>response.text())
+          .then(result=>{
+            if(result === 'success') location.href = "/lk";
+            else if (result === 'error') info.innerText = `Неправильный логин или пароль`;
+          });
+      }
+    </script>

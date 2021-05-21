@@ -1,0 +1,35 @@
+<div class="container">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Заголовок</th>
+        <th scope="col">Автор</th>
+        <th scope="col">Дата добавления</th>
+        <th scope="col">Управление</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+  let posts = '';
+  let tbody = document.getElementById("tbody");
+  fetch('/getPosts')
+    .then(response=>response.json())
+    .then(result=>{
+      result.forEach((post,index)=>{
+        posts += `
+          <tr>
+            <th scope="row">${index+1}</th>
+            <td>${post.title}</td>
+            <td>${post.author}</td>
+            <td>${post.add_date}</td>
+            <td><a href="/admin/editPost/${post.id}">Редактировать</a></td>
+          </tr>
+        `
+      });
+      tbody.innerHTML = posts;
+    })
+</script>

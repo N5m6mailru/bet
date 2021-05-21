@@ -1,0 +1,38 @@
+        <!-- Main Content-->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto" id="postList">
+                    <!-- Pager-->
+                    <div class="clearfix"><a class="btn btn-primary float-right" href="#!">Older Posts →</a></div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <script>
+          let posts = '';
+          fetch('/getPosts')
+            .then(response=>response.json())
+            .then(result=>{
+              result.forEach(post=>{
+                const parser = new DOMParser();
+                const subtitle = parser.parseFromString(post.content, "text/html");
+                posts += `
+                  <div class="post-preview">
+                      <a href="/post/${post.id}">
+                          <h2 class="post-title">${post.title}</h2>
+                          <h3 class="post-subtitle">${subtitle.body.innerText.substr(0,100)+'...'}</h3>
+                      </a>
+                      <p class="post-meta">
+                          Posted by
+                          ${post.author}
+                          on ${post.add_date}
+                      </p>
+                  </div>
+                  <hr />
+                `;
+                postList.innerHTML = posts;
+              })
+            })
+        </script>
+        
+        
